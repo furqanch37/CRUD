@@ -1,5 +1,14 @@
-import React from "react";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -14,6 +23,7 @@ const schema = Yup.object().shape({
 
 export default function Login() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -35,18 +45,15 @@ export default function Login() {
         savedUser.password === data.password) ||
       (data.email === adminUser.email && data.password === adminUser.password)
     ) {
-      // Store login status
       localStorage.setItem("isLoggedIn", "true");
 
-      // Store role for RBAC
       const role = data.email === adminUser.email ? "admin" : "user";
       localStorage.setItem("role", role);
 
-      // Store user info if needed
       localStorage.setItem("user", JSON.stringify({ ...data, role }));
 
       toast.success("Login successful!");
-      navigate("/"); // redirect to home/dashboard
+      navigate("/");
     } else {
       toast.error("Invalid credentials");
     }
@@ -70,11 +77,20 @@ export default function Login() {
           <TextField
             fullWidth
             margin="normal"
-            type="password"
+            type={showPassword ? "text" : "password"}
             label="Password"
             {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Login

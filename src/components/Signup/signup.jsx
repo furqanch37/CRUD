@@ -1,11 +1,13 @@
 // Signup.jsx
-import React from "react";
+import React, {useState} from "react";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { InputAdornment, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 
 
@@ -22,7 +24,7 @@ const schema = Yup.object().shape({
 
 export default function Signup() {
   const navigate = useNavigate();
-
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -56,11 +58,24 @@ const onSubmit = (formData) => {
             helperText={errors.email?.message}
           />
           <TextField
-            fullWidth margin="normal" type="password" label="Password"
-            {...register("password")}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-          />
+  fullWidth
+  margin="normal"
+  type={showPassword ? "text" : "password"}
+  label="Password"
+  {...register("password")}
+  error={!!errors.password}
+  helperText={errors.password?.message}
+  InputProps={{
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton onClick={() => setShowPassword((prev) => !prev)} edge="end">
+          {showPassword ? <VisibilityOff /> : <Visibility />}
+        </IconButton>
+      </InputAdornment>
+    ),
+  }}
+/>
+
           <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Signup
           </Button>
