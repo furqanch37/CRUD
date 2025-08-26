@@ -5,7 +5,7 @@ import UserTable from "./components/Tailcrud/tailcrud";
 import Login from "./components/Login/login";
 import Signup from "./components/Signup/signup";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Layout from "./components/Layout/Layout"; // ✅ import Layout
+import Layout from "./components/Layout/Layout"; 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

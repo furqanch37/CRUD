@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, Modal, Form, Input } from "antd";
+import { Table, Button, Input, Modal, Form } from "antd";
+import "antd/dist/reset.css";
 
 const CrudAntdTable = () => {
   const [data, setData] = useState([

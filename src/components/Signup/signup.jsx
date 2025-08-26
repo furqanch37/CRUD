@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-const userWithRole = { ...data, role: "user" };
+
 
 
 // ✅ Validation Schema
@@ -31,13 +31,9 @@ export default function Signup() {
     resolver: yupResolver(schema),
   });
 
- const onSubmit = (data) => {
-  // Assign role to user (default: "user")
-  const userWithRole = { ...data, role: "user" };
-
-  // Save user in localStorage
+const onSubmit = (formData) => {
+  const userWithRole = { ...formData, role: "user" };
   localStorage.setItem("user", JSON.stringify(userWithRole));
-
   toast.success("Signup successful! Please login.");
   navigate("/login");
 };
