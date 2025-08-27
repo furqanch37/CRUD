@@ -1,28 +1,33 @@
-import React from "react";
-import { Box, Toolbar } from "@mui/material";
-import Sidebar from "../SideBar/sidebar"; // make sure Sidebar.jsx is in the same folder or adjust the path
+import { Box } from "@mui/material";
+import Sidebar from "../SideBar/sidebar";
 import Navbar from "../Navbar/navbar";
-export default function Layout({ children }) {
+
+export default function Layout({ children, isBlurred }) {
   return (
-    <Box sx={{ display: "flex" }}>
-      {/* Fixed Sidebar */}
-      <Sidebar />
-
-      {/* Main content area */}
-      <Box sx={{ flexGrow: 1 }}>
-        {/* Navbar */}
-        <Navbar />
-
-        {/* Main content */}
+    <Box sx={{ display: "flex", position: "relative" }}>
+      {/* Full-page blur overlay */}
+      {isBlurred && (
         <Box
-          component="main"
           sx={{
-            flexGrow: 1,
-            minHeight: "100vh",
-            p: 3,
-            mt: 8, // spacing to avoid overlap with Navbar
+            position: "fixed",
+            inset: 0,
+            backdropFilter: "blur(5px)",
+            backgroundColor: "rgba(0,0,0,0.1)",
+            zIndex: 0, // below modal
           }}
-        >
+        />
+      )}
+
+      <Box className="sidebar">
+        <Sidebar />
+      </Box>
+
+      <Box sx={{ flexGrow: 1 }}>
+        <Box className="navbar">
+          <Navbar />
+        </Box>
+
+        <Box component="main" sx={{ flexGrow: 1, minHeight: "100vh", p: 3, mt: 8 }}>
           {children}
         </Box>
       </Box>

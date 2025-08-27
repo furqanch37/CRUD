@@ -1,5 +1,7 @@
 import React, { useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
+
 import {
   Table,
   TableBody,
@@ -27,6 +29,7 @@ export default function CrudTable() {
     { id: 4, name: "Bobby Nash", age: 28, joinDate: "2025-05-25", department: "Market" },
     { id: 5, name: "Mable Huff", age: 23, joinDate: "2025-01-22", department: "Market" },
   ]);
+const [loading, setLoading] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [editRow, setEditRow] = useState(null);
@@ -54,14 +57,30 @@ const role = localStorage.getItem("role"); // "admin" or "user"
   };
 
   // Save Changes (Edit / Add)
-  const handleSave = () => {
+// Save Changes (Edit / Add)
+const handleSave = () => {
+  setLoading(true); // start spinner
+  setTimeout(() => { // simulate async processing
     if (editRow.id) {
       setRows(rows.map((r) => (r.id === editRow.id ? editRow : r)));
     } else {
       setRows([...rows, { ...editRow, id: rows.length + 1 }]);
     }
+    setLoading(false); // stop spinner
     handleClose();
-  };
+  }, 1000);
+};
+
+// Final delete after confirmation
+const handleDelete = () => {
+  setLoading(true); // start spinner
+  setTimeout(() => {
+    setRows(rows.filter((row) => row.id !== deleteId));
+    setLoading(false); // stop spinner
+    setConfirmOpen(false);
+    setDeleteId(null);
+  }, 1000);
+};
 
   // Delete Row
  // Ask before deleting
@@ -70,16 +89,10 @@ const confirmDelete = (id) => {
   setConfirmOpen(true);
 };
 
-// Final delete after confirmation
-const handleDelete = () => {
-  setRows(rows.filter((row) => row.id !== deleteId));
-  setConfirmOpen(false);
-  setDeleteId(null);
-};
 
   return (
   <div style={{ width: "100%", maxWidth: "1300px",  minHeight: "100vh", padding: 20, boxSizing: "border-box" }}>
-    <div style={{ display:"flex", justifyContent: "flex-end", marginBottom: 10 }}>
+    <div style={{ display:"flex", justifyContent: "flex-end", marginBottom: 15 }}>
      <Button
   variant="contained"
   startIcon={<Add />}
@@ -177,7 +190,7 @@ const handleDelete = () => {
             onChange={(e) => setEditRow({ ...editRow, department: e.target.value })}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions style={{ padding:"20px 24px", paddingTop :"0px" }}>
           <Button onClick={handleClose} color="secondary">Cancel</Button>
           <Button onClick={handleSave} variant="contained" color="primary" disabled={role !== "admin"}>
   Save
@@ -191,7 +204,7 @@ const handleDelete = () => {
   <DialogContent>
     Are you sure you want to delete this employee?
   </DialogContent>
-  <DialogActions>
+  <DialogActions style={{padding: "0 24px 20px"}}>
     <Button onClick={() => setConfirmOpen(false)} color="secondary">
       Cancel
     </Button>
@@ -200,21 +213,19 @@ const handleDelete = () => {
     </Button>
   </DialogActions>
 </Dialog>
+{loading && (
+  <div style={{
+    position: "fixed",
+    top: 0, left: 0, right: 0, bottom: 0,
+    display: "flex", alignItems: "center", justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    zIndex: 2000
+  }}>
+    <CircularProgress color="primary" size={60} />
+  </div>
+)}
 
-       <div className="flex justify-center gap-4 mt-8">
-        <button
-          onClick={() => navigate("/")}
-          className="bg-blue-600 text-white px-6 py-2 rounded-md shadow hover:bg-blue-700"
-        >
-          Go to Ant-Design
-        </button>
-        <button
-          onClick={() => navigate("/tailwind")}
-          className="bg-green-600 text-white px-6 py-2 rounded-md shadow hover:bg-green-700"
-        >
-          Go to Tailwind
-        </button>
-      </div>
+      
     </div>
   );
 }

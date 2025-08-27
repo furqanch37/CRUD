@@ -1,0 +1,9 @@
+.ant-modal-open .sidebar,
+.ant-modal-open .navbar {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+}
+
+.all{
+  background-color: white;
+}

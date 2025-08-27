@@ -1,0 +1,4 @@
+.ant-modal-open #app-container {
+  filter: blur(6px);       /* adjust to low/high blur */
+  transition: filter 0.3s ease;
+}
